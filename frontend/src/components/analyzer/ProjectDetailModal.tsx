@@ -41,26 +41,32 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
   const scoreColors = getScoreColor(project.overall_score);
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 lg:p-8 animate-fadeIn">
-      <div className="relative w-full max-w-5xl bg-[#0D1322] border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden max-h-[94vh] flex flex-col">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 lg:p-8 animate-fadeIn">
+      <div className="relative w-full max-w-5xl bg-[#101629] border border-white/10 rounded-3xl shadow-2xl overflow-hidden max-h-[94vh] flex flex-col">
         {/* Modal Top Header */}
-        <div className="px-6 py-4 bg-[#0B0F19] border-b border-slate-800 flex items-center justify-between gap-4 shrink-0">
-          <div className="flex items-center space-x-3">
-            <span className="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30 flex items-center gap-1.5">
-              <Trophy className="w-3.5 h-3.5" />
-              Rank #{project.rank}
+        <div className="px-6 py-5 bg-[#080B16] border-b border-white/10 flex items-center justify-between gap-4 shrink-0">
+          <div className="flex items-center space-x-4">
+            <span className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold flex items-center gap-1.5 border shadow-sm ${
+              project.rank === 1
+                ? 'bg-amber-500/15 text-amber-300 border-amber-500/40'
+                : project.rank === 2
+                ? 'bg-cyan-500/15 text-cyan-300 border-cyan-500/40'
+                : 'bg-purple-500/15 text-purple-300 border-purple-500/40'
+            }`}>
+              <Trophy className="w-4 h-4" />
+              <span>Rank #{project.rank}</span>
             </span>
             <div>
-              <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+              <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
                 {project.display_name}
               </h2>
-              <div className="flex items-center gap-2 text-xs font-mono text-purple-300">
+              <div className="flex items-center gap-2 text-xs font-mono text-purple-300 mt-0.5">
                 <span>{project.name}</span>
-                <span>•</span>
-                <span>{project.primary_language}</span>
+                <span className="text-slate-600">•</span>
+                <span className="text-cyan-400">{project.primary_language}</span>
                 {project.confidence_label && (
                   <>
-                    <span>•</span>
+                    <span className="text-slate-600">•</span>
                     <span className="text-emerald-400 font-semibold">{project.confidence_label} Confidence</span>
                   </>
                 )}
@@ -70,17 +76,17 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
 
           <div className="flex items-center space-x-3">
             <div
-              className={`flex items-baseline space-x-1 px-3 py-1.5 rounded-xl border ${scoreColors.bg} ${scoreColors.border}`}
+              className={`flex items-baseline space-x-1 px-3.5 py-1.5 rounded-2xl border ${scoreColors.bg} ${scoreColors.border}`}
             >
-              <span className={`text-xl font-extrabold ${scoreColors.text}`}>
+              <span className={`text-2xl font-black font-mono ${scoreColors.text}`}>
                 {formatScore(project.overall_score)}
               </span>
-              <span className="text-xs text-slate-400">/ 10</span>
+              <span className="text-xs text-slate-400 font-mono">/ 10</span>
             </div>
 
             <button
               onClick={onClose}
-              className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer"
+              className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer"
               aria-label="Close project modal"
             >
               <X className="w-6 h-6" />
@@ -89,7 +95,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
         </div>
 
         {/* Modal Navigation Tabs */}
-        <div className="px-6 bg-[#0E1527] border-b border-slate-800 flex space-x-1 shrink-0 overflow-x-auto">
+        <div className="px-6 bg-[#0B0F19] border-b border-white/5 flex space-x-1 shrink-0 overflow-x-auto">
           {[
             { id: 'overview', label: '1. Overview & Purpose' },
             { id: 'evaluation', label: '2. 8-Pillar Scoring' },
@@ -101,10 +107,10 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as typeof activeTab)}
-              className={`px-3.5 py-3 text-xs sm:text-sm font-medium border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
+              className={`px-4 py-3 text-xs sm:text-sm font-semibold border-b-2 transition-all whitespace-nowrap cursor-pointer ${
                 activeTab === tab.id
-                  ? 'border-purple-500 text-purple-300'
-                  : 'border-transparent text-slate-400 hover:text-slate-200'
+                  ? 'border-purple-500 text-purple-300 bg-purple-500/10'
+                  : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-white/5'
               }`}
             >
               {tab.label}
@@ -113,14 +119,14 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
         </div>
 
         {/* Modal Scrollable Body */}
-        <div className="p-6 overflow-y-auto space-y-6 flex-1 text-slate-300">
+        <div className="p-6 sm:p-8 overflow-y-auto space-y-6 flex-1 text-slate-300 bg-[#101629]">
           {/* TAB 1: OVERVIEW & PURPOSE */}
           {activeTab === 'overview' && (
             <div className="space-y-6">
               {/* Executive Summary */}
-              <div className="p-5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
-                <span className="text-xs font-semibold uppercase tracking-wider text-purple-400 flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-purple-400" />
+              <div className="p-6 rounded-2xl bg-[#151D33] border border-purple-500/20 space-y-2 shadow-lg">
+                <span className="text-xs font-bold uppercase tracking-wider text-purple-400 flex items-center gap-1.5 font-mono">
+                  <ShieldCheck className="w-4 h-4 text-cyan-400" />
                   Executive Technical Summary
                 </span>
                 <p className="text-sm leading-relaxed text-slate-200">
@@ -130,24 +136,24 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
 
               {/* Problem Solved */}
               <div className="space-y-2">
-                <h4 className="text-xs uppercase font-semibold tracking-wider text-slate-400">
+                <h4 className="text-xs uppercase font-bold tracking-wider text-slate-400 font-mono">
                   Problem Statement & Purpose
                 </h4>
-                <div className="p-4 rounded-xl bg-[#111827] border border-slate-800 text-sm text-slate-300 leading-relaxed">
+                <div className="p-5 rounded-2xl bg-[#151D33] border border-white/5 text-sm text-slate-300 leading-relaxed">
                   {project.problem_solved}
                 </div>
               </div>
 
               {/* Key Features */}
               <div className="space-y-3">
-                <h4 className="text-xs uppercase font-semibold tracking-wider text-slate-400">
+                <h4 className="text-xs uppercase font-bold tracking-wider text-slate-400 font-mono">
                   Main Verified Features
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {project.key_features.map((feat, idx) => (
                     <div
                       key={idx}
-                      className="p-3.5 rounded-xl bg-[#111827] border border-slate-800 text-xs sm:text-sm text-slate-300 flex items-start space-x-2.5"
+                      className="p-4 rounded-xl bg-[#151D33] border border-white/5 text-xs sm:text-sm text-slate-200 flex items-start space-x-3"
                     >
                       <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                       <span>{feat}</span>
@@ -158,20 +164,20 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
 
               {/* Ranking Rationale */}
               {project.ranking_rationale && (
-                <div className="p-4 rounded-xl bg-purple-950/20 border border-purple-500/30 text-xs text-purple-200 space-y-1">
-                  <span className="font-semibold text-purple-300 block">Ranking Rationale:</span>
-                  <p>{project.ranking_rationale}</p>
+                <div className="p-4 rounded-2xl bg-purple-950/30 border border-purple-500/30 text-xs text-purple-200 space-y-1">
+                  <span className="font-bold text-purple-300 block font-mono">Ranking Rationale:</span>
+                  <p className="leading-relaxed">{project.ranking_rationale}</p>
                 </div>
               )}
 
               {/* Repository Link */}
-              <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-400 flex items-center justify-between">
+              <div className="p-4 rounded-xl bg-[#080B16] border border-white/5 text-xs text-slate-400 flex items-center justify-between font-mono">
                 <span>Repository URL: {project.repo_url}</span>
                 <a
                   href={project.repo_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-purple-400 hover:text-white"
+                  className="flex items-center gap-1.5 text-cyan-400 hover:text-cyan-300 underline"
                 >
                   <span>Open GitHub</span>
                   <ExternalLink className="w-3.5 h-3.5" />
@@ -183,9 +189,9 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
           {/* TAB 2: 8-PILLAR EVALUATION & SCORING */}
           {activeTab === 'evaluation' && (
             <div className="space-y-6">
-              <div className="flex items-center justify-between text-xs text-slate-400">
+              <div className="flex items-center justify-between text-xs text-slate-400 pb-2 border-b border-white/5 font-mono">
                 <span>Deterministic 8-Pillar Evaluation (Sum = 100%)</span>
-                <span className="font-mono text-purple-400 font-bold">
+                <span className="text-purple-400 font-bold">
                   Final Rating: {formatScore(project.overall_score)} / 10.0
                 </span>
               </div>
@@ -196,14 +202,14 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
                   return (
                     <div
                       key={idx}
-                      className="p-4 rounded-xl bg-[#111827] border border-slate-800 space-y-3"
+                      className="p-5 rounded-2xl bg-[#151D33] border border-white/5 space-y-3"
                     >
                       <div className="flex items-center justify-between gap-2">
                         <div className="flex items-center space-x-2">
-                          <span className="text-sm font-semibold text-white">
+                          <span className="text-sm font-bold text-white">
                             {criterion.name}
                           </span>
-                          <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-slate-800 text-slate-300 border border-slate-700">
+                          <span className="px-2 py-0.5 rounded-full text-[11px] font-mono bg-[#080B16] text-purple-300 border border-white/10 font-bold">
                             {criterion.weight}% Weight
                           </span>
                         </div>
@@ -213,7 +219,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
                             {criterion.rating_label}
                           </span>
                           <span
-                            className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold ${critColor.bg} ${critColor.text} border ${critColor.border}`}
+                            className={`px-3 py-1 rounded-xl text-xs font-mono font-bold ${critColor.bg} ${critColor.text} border ${critColor.border}`}
                           >
                             {formatScore(criterion.score)} / 10
                           </span>
@@ -221,10 +227,10 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
                       </div>
 
                       {/* Progress bar */}
-                      <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+                      <div className="w-full h-2 rounded-full bg-[#080B16] overflow-hidden">
                         <div
                           style={{ width: `${(criterion.score / 10) * 100}%` }}
-                          className="h-full bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"
+                          className="h-full bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-400 rounded-full"
                         />
                       </div>
 
@@ -234,10 +240,10 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
 
                       {/* Findings list */}
                       {criterion.findings.length > 0 && (
-                        <div className="space-y-1.5 pt-2 border-t border-slate-800/80">
+                        <div className="space-y-1.5 pt-3 border-t border-white/5">
                           {criterion.findings.map((f, fIdx) => (
                             <div key={fIdx} className="flex items-start space-x-2 text-xs text-slate-300">
-                              <span className="text-purple-400 mt-0.5">•</span>
+                              <span className="text-cyan-400 mt-0.5">•</span>
                               <span>{f}</span>
                             </div>
                           ))}
@@ -254,9 +260,9 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
           {activeTab === 'architecture' && (
             <div className="space-y-6">
               {/* Architecture Review */}
-              <div className="p-5 rounded-xl bg-[#111827] border border-slate-800 space-y-2">
-                <span className="text-xs font-semibold uppercase tracking-wider text-blue-400 flex items-center gap-1.5">
-                  <Layers className="w-4 h-4 text-blue-400" />
+              <div className="p-6 rounded-2xl bg-[#151D33] border border-blue-500/20 space-y-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5 font-mono">
+                  <Layers className="w-4 h-4 text-cyan-400" />
                   Software Architectural Design Notes
                 </span>
                 <p className="text-sm leading-relaxed text-slate-300">
@@ -266,11 +272,11 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
 
               {/* Language Distribution Breakdown */}
               <div className="space-y-3">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                  <PieChart className="w-4 h-4 text-indigo-400" />
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5 font-mono">
+                  <PieChart className="w-4 h-4 text-purple-400" />
                   Calculated Programming Language Distribution (GitHub API Bytes)
                 </h4>
-                <div className="h-4 w-full rounded-full bg-slate-800 overflow-hidden flex shadow-inner">
+                <div className="h-4 w-full rounded-full bg-[#080B16] overflow-hidden flex shadow-inner">
                   {project.language_breakdown.map((lang, idx) => (
                     <div
                       key={idx}
@@ -284,16 +290,16 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
                   {project.language_breakdown.map((lang, idx) => (
                     <div
                       key={idx}
-                      className="p-3 rounded-xl bg-[#111827] border border-slate-800 flex items-center justify-between text-xs"
+                      className="p-3.5 rounded-xl bg-[#151D33] border border-white/5 flex items-center justify-between text-xs"
                     >
-                      <span className="flex items-center gap-1.5 font-medium text-slate-300">
+                      <span className="flex items-center gap-1.5 font-semibold text-slate-300">
                         <span
                           className="w-2.5 h-2.5 rounded-full"
                           style={{ backgroundColor: lang.color }}
                         />
                         {lang.name}
                       </span>
-                      <span className="font-mono text-slate-400">{lang.percentage}%</span>
+                      <span className="font-mono text-cyan-300 font-bold">{lang.percentage}%</span>
                     </div>
                   ))}
                 </div>
@@ -301,23 +307,23 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
 
               {/* Grouped Technology Stack */}
               <div className="space-y-4">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 font-mono">
                   Categorized Technology Stack
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {project.tech_stack.map((cat, idx) => (
                     <div
                       key={idx}
-                      className="p-4 rounded-xl bg-[#111827] border border-slate-800 space-y-2.5"
+                      className="p-5 rounded-2xl bg-[#151D33] border border-white/5 space-y-3"
                     >
-                      <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                      <span className="text-xs font-bold text-slate-300 uppercase tracking-wider font-mono">
                         {cat.category}
                       </span>
                       <div className="flex flex-wrap gap-1.5">
                         {cat.items.map((item, iIdx) => (
                           <span
                             key={iIdx}
-                            className="px-2.5 py-1 rounded-md text-xs bg-slate-900 border border-slate-700/80 text-purple-300 font-medium"
+                            className="px-3 py-1 rounded-lg text-xs bg-[#080B16] border border-white/10 text-purple-300 font-medium"
                           >
                             {item}
                           </span>
@@ -333,18 +339,18 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
           {/* TAB 4: CODE QUALITY & COMPLEXITY */}
           {activeTab === 'quality' && (
             <div className="space-y-6">
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5 font-mono">
                 <Binary className="w-4 h-4 text-purple-400" />
                 AST Complexity & Structural Metrics
               </h4>
 
               {project.complexity_metrics ? (
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div className="p-4 rounded-xl bg-[#111827] border border-slate-800">
-                    <span className="text-[11px] uppercase tracking-wider text-slate-400 block mb-1">
+                  <div className="p-5 rounded-2xl bg-[#151D33] border border-white/5">
+                    <span className="text-[11px] uppercase tracking-wider text-slate-400 block mb-1 font-mono">
                       Cyclomatic Complexity (Avg)
                     </span>
-                    <span className="text-2xl font-extrabold text-white font-mono">
+                    <span className="text-3xl font-black text-white font-mono">
                       {project.complexity_metrics.cyclomatic_complexity_avg ?? 'N/A'}
                     </span>
                     <span className="text-xs text-slate-500 block mt-1">
@@ -352,11 +358,11 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
                     </span>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-[#111827] border border-slate-800">
-                    <span className="text-[11px] uppercase tracking-wider text-slate-400 block mb-1">
+                  <div className="p-5 rounded-2xl bg-[#151D33] border border-white/5">
+                    <span className="text-[11px] uppercase tracking-wider text-slate-400 block mb-1 font-mono">
                       Maintainability Index
                     </span>
-                    <span className="text-2xl font-extrabold text-emerald-400 font-mono">
+                    <span className="text-3xl font-black text-emerald-400 font-mono">
                       {project.complexity_metrics.maintainability_index ?? 'N/A'}/100
                     </span>
                     <span className="text-xs text-slate-500 block mt-1">
@@ -364,11 +370,11 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
                     </span>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-[#111827] border border-slate-800">
-                    <span className="text-[11px] uppercase tracking-wider text-slate-400 block mb-1">
+                  <div className="p-5 rounded-2xl bg-[#151D33] border border-white/5">
+                    <span className="text-[11px] uppercase tracking-wider text-slate-400 block mb-1 font-mono">
                       Functions &amp; Classes
                     </span>
-                    <span className="text-xl font-bold text-slate-200 font-mono">
+                    <span className="text-2xl font-bold text-slate-200 font-mono">
                       {project.complexity_metrics.total_functions} fn / {project.complexity_metrics.total_classes} cls
                     </span>
                     <span className="text-xs text-slate-500 block mt-1">
@@ -381,7 +387,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
               )}
 
               {project.complexity_metrics?.notes && (
-                <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-400">
+                <div className="p-4 rounded-xl bg-[#080B16] border border-white/5 text-xs text-slate-400 font-mono">
                   {project.complexity_metrics.notes}
                 </div>
               )}
@@ -393,7 +399,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
             <div className="space-y-6">
               {/* Security Findings */}
               <div className="space-y-3">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-rose-400 flex items-center gap-1.5">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-rose-400 flex items-center gap-1.5 font-mono">
                   <ShieldAlert className="w-4 h-4 text-rose-400" />
                   Static Security Scan Findings (Redacted)
                 </h4>
@@ -403,10 +409,10 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
                     {project.security_findings.map((finding, idx) => (
                       <div
                         key={idx}
-                        className="p-4 rounded-xl bg-rose-950/20 border border-rose-500/30 space-y-2 text-xs"
+                        className="p-5 rounded-2xl bg-rose-950/20 border border-rose-500/30 space-y-2 text-xs"
                       >
                         <div className="flex items-center justify-between">
-                          <span className="font-semibold text-rose-300 uppercase tracking-wide">
+                          <span className="font-bold text-rose-300 uppercase tracking-wide">
                             [{finding.severity}] {finding.category}
                           </span>
                           <span className="font-mono text-slate-400">
@@ -415,19 +421,19 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
                         </div>
                         <p className="text-slate-300">{finding.explanation}</p>
                         {finding.evidence_snippet && (
-                          <div className="p-2 rounded bg-slate-950 font-mono text-[11px] text-amber-300 border border-slate-800">
+                          <div className="p-2.5 rounded-lg bg-[#080B16] font-mono text-[11px] text-amber-300 border border-white/10">
                             Snippet: {finding.evidence_snippet}
                           </div>
                         )}
-                        <p className="text-emerald-400 text-[11px]">
+                        <p className="text-emerald-400 text-[11px] font-semibold">
                           Fix: {finding.remediation}
                         </p>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <div className="p-4 rounded-xl bg-emerald-950/20 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <div className="p-5 rounded-2xl bg-emerald-950/20 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2.5">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
                     <span>No hardcoded credentials, secret assignments, or dangerous execution calls detected.</span>
                   </div>
                 )}
@@ -440,7 +446,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
             <div className="space-y-6">
               {/* Strengths */}
               <div className="space-y-2">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5 font-mono">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                   Engineering Strengths
                 </h4>
@@ -448,9 +454,9 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
                   {project.strengths.map((str, idx) => (
                     <div
                       key={idx}
-                      className="p-3 rounded-xl bg-emerald-950/15 border border-emerald-500/20 text-xs text-emerald-200 flex items-start space-x-2"
+                      className="p-3.5 rounded-xl bg-emerald-950/20 border border-emerald-500/20 text-xs text-emerald-200 flex items-start space-x-2.5"
                     >
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                       <span>{str}</span>
                     </div>
                   ))}
@@ -459,7 +465,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
 
               {/* Weaknesses */}
               <div className="space-y-2">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-rose-400 flex items-center gap-1.5">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-rose-400 flex items-center gap-1.5 font-mono">
                   <AlertCircle className="w-4 h-4 text-rose-400" />
                   Identified Areas for Improvement
                 </h4>
@@ -467,9 +473,9 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
                   {project.weaknesses.map((weak, idx) => (
                     <div
                       key={idx}
-                      className="p-3 rounded-xl bg-rose-950/15 border border-rose-500/20 text-xs text-rose-200 flex items-start space-x-2"
+                      className="p-3.5 rounded-xl bg-rose-950/20 border border-rose-500/20 text-xs text-rose-200 flex items-start space-x-2.5"
                     >
-                      <AlertCircle className="w-3.5 h-3.5 text-rose-400 shrink-0 mt-0.5" />
+                      <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
                       <span>{weak}</span>
                     </div>
                   ))}
@@ -478,7 +484,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
 
               {/* Actionable Recommendations */}
               <div className="space-y-2">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5 font-mono">
                   <Lightbulb className="w-4 h-4 text-amber-400" />
                   Actionable Recommendations for Reviewers & Students
                 </h4>
@@ -486,9 +492,9 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
                   {project.recommendations.map((rec, idx) => (
                     <div
                       key={idx}
-                      className="p-3 rounded-xl bg-amber-950/15 border border-amber-500/20 text-xs text-amber-200 flex items-start space-x-2"
+                      className="p-3.5 rounded-xl bg-amber-950/20 border border-amber-500/20 text-xs text-amber-200 flex items-start space-x-2.5"
                     >
-                      <Lightbulb className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
+                      <Lightbulb className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                       <span>{rec}</span>
                     </div>
                   ))}
@@ -497,19 +503,19 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
 
               {/* Inspected Evidence Files */}
               {project.evidence_files && project.evidence_files.length > 0 && (
-                <div className="space-y-2 pt-2 border-t border-slate-800">
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                    <FileCode className="w-4 h-4 text-blue-400" />
+                <div className="space-y-2 pt-3 border-t border-white/5">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5 font-mono">
+                    <FileCode className="w-4 h-4 text-cyan-400" />
                     Inspected Evidence File References ({project.evidence_files.length} files)
                   </h4>
                   <div className="max-h-48 overflow-y-auto space-y-1.5 pr-1">
                     {project.evidence_files.map((file, idx) => (
                       <div
                         key={idx}
-                        className="p-2 rounded bg-slate-900 border border-slate-800 text-[11px] font-mono flex items-center justify-between text-slate-400"
+                        className="p-2.5 rounded-lg bg-[#080B16] border border-white/5 text-[11px] font-mono flex items-center justify-between text-slate-400"
                       >
-                        <span className="text-slate-300">{file.path}</span>
-                        <span className="px-1.5 py-0.5 rounded bg-slate-800 text-purple-400 text-[10px] uppercase">
+                        <span className="text-slate-200">{file.path}</span>
+                        <span className="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 text-[10px] uppercase font-bold">
                           {file.category}
                         </span>
                       </div>
@@ -522,11 +528,11 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
         </div>
 
         {/* Modal Bottom Footer */}
-        <div className="px-6 py-4 bg-[#0B0F19] border-t border-slate-800 flex items-center justify-between text-xs text-slate-500 shrink-0">
-          <span>RepoScope Evidence-Based Project Evaluation</span>
+        <div className="px-6 py-4 bg-[#080B16] border-t border-white/10 flex items-center justify-between text-xs text-slate-400 shrink-0">
+          <span className="font-mono text-slate-400">RepoScope Evidence-Based Project Evaluation</span>
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors cursor-pointer"
+            className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-slate-800 hover:bg-slate-700 transition-colors cursor-pointer"
           >
             Close Report
           </button>

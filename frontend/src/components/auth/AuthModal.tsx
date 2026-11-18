@@ -63,24 +63,24 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-      <div className="relative w-full max-w-md bg-[#0F172A] border border-slate-800 rounded-2xl shadow-2xl p-6 sm:p-8 space-y-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
+      <div className="relative w-full max-w-md bg-[#151D33] border border-white/10 rounded-3xl shadow-2xl p-6 sm:p-8 space-y-6">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 text-slate-400 hover:text-white transition-colors"
+          className="absolute top-5 right-5 text-slate-400 hover:text-white transition-colors p-1.5 rounded-xl hover:bg-white/5"
           aria-label="Close modal"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Modal Header */}
-        <div className="space-y-1">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-medium mb-1">
-            <ShieldCheck className="w-3.5 h-3.5" />
+        <div className="space-y-1.5">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/15 border border-purple-500/30 text-purple-300 text-xs font-mono font-bold">
+            <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
             <span>Academic Portal</span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+          <h2 className="text-2xl font-black text-white tracking-tight">
             {isRegister ? 'Register Faculty Account' : 'Faculty & Reviewer Login'}
           </h2>
           <p className="text-xs sm:text-sm text-slate-400">
@@ -92,7 +92,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
         {/* Error Alert */}
         {error && (
-          <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
+          <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2.5">
             <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
             <span>{error}</span>
           </div>
@@ -103,77 +103,86 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
           {isRegister && (
             <>
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Full Name & Title</label>
+                <label className="block text-xs font-bold text-slate-300 mb-1.5 font-mono uppercase tracking-wider">
+                  Full Name
+                </label>
                 <div className="relative">
-                  <UserIcon className="absolute left-3 top-3 w-4 h-4 text-slate-500" />
+                  <UserIcon className="absolute left-3.5 top-3.5 w-4 h-4 text-purple-400" />
                   <input
                     type="text"
                     required
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    placeholder="e.g. Dr. Alistair Vance, Ph.D."
-                    className="w-full pl-9 pr-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:border-indigo-500"
+                    placeholder="Prof. Alan Turing"
+                    className="w-full pl-10 pr-4 py-3 bg-[#080B16] border border-white/10 rounded-2xl text-white placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-purple-500/80 font-sans"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Department</label>
+                <label className="block text-xs font-bold text-slate-300 mb-1.5 font-mono uppercase tracking-wider">
+                  Department
+                </label>
                 <div className="relative">
-                  <Building className="absolute left-3 top-3 w-4 h-4 text-slate-500" />
+                  <Building className="absolute left-3.5 top-3.5 w-4 h-4 text-purple-400" />
                   <input
                     type="text"
                     required
                     value={department}
                     onChange={(e) => setDepartment(e.target.value)}
-                    placeholder="Department of Computer Science & Engineering"
-                    className="w-full pl-9 pr-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:border-indigo-500"
+                    placeholder="Department of Computer Science"
+                    className="w-full pl-10 pr-4 py-3 bg-[#080B16] border border-white/10 rounded-2xl text-white placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-purple-500/80 font-sans"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Role</label>
+                <label className="block text-xs font-bold text-slate-300 mb-1.5 font-mono uppercase tracking-wider">
+                  Role
+                </label>
                 <select
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
-                  className="w-full px-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:border-indigo-500"
+                  className="w-full px-4 py-3 bg-[#080B16] border border-white/10 rounded-2xl text-white text-xs sm:text-sm focus:outline-none focus:border-purple-500/80 font-sans cursor-pointer"
                 >
-                  <option value="FACULTY">Faculty Evaluator</option>
-                  <option value="ADMIN">Academic Board Administrator</option>
-                  <option value="REVIEWER">External Technical Reviewer</option>
+                  <option value="FACULTY">Faculty Member / Professor</option>
+                  <option value="EVALUATOR">External Reviewer / Recruiter</option>
+                  <option value="ADMIN">System Administrator</option>
                 </select>
               </div>
             </>
           )}
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1">Institutional Email</label>
+            <label className="block text-xs font-bold text-slate-300 mb-1.5 font-mono uppercase tracking-wider">
+              Institutional Email
+            </label>
             <div className="relative">
-              <Mail className="absolute left-3 top-3 w-4 h-4 text-slate-500" />
+              <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-purple-400" />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="faculty@university.edu"
-                className="w-full pl-9 pr-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:border-indigo-500"
+                className="w-full pl-10 pr-4 py-3 bg-[#080B16] border border-white/10 rounded-2xl text-white placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-purple-500/80 font-mono"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1">Password</label>
+            <label className="block text-xs font-bold text-slate-300 mb-1.5 font-mono uppercase tracking-wider">
+              Password
+            </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-3 w-4 h-4 text-slate-500" />
+              <Lock className="absolute left-3.5 top-3.5 w-4 h-4 text-purple-400" />
               <input
                 type="password"
                 required
-                minLength={8}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-9 pr-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:border-indigo-500"
+                className="w-full pl-10 pr-4 py-3 bg-[#080B16] border border-white/10 rounded-2xl text-white placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-purple-500/80 font-mono"
               />
             </div>
           </div>
@@ -181,12 +190,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 px-4 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 shadow-lg shadow-indigo-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+            className="w-full py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 shadow-lg shadow-purple-600/30 transition-all flex items-center justify-center space-x-2 cursor-pointer disabled:opacity-50"
           >
             {loading ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Processing...</span>
+                <span>Authenticating...</span>
               </>
             ) : (
               <span>{isRegister ? 'Complete Registration' : 'Sign In'}</span>
@@ -195,32 +204,52 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         </form>
 
         {/* Demo Fast Login */}
-        <div className="pt-2 border-t border-slate-800/80 flex flex-col items-center gap-2">
-          <button
-            type="button"
-            onClick={handleUseDemo}
-            disabled={loading}
-            className="text-xs text-indigo-400 hover:text-indigo-300 underline cursor-pointer"
-          >
-            Quick Sign In with Default Faculty Demo (faculty@university.edu)
-          </button>
-
-          <div className="text-xs text-slate-500">
-            {isRegister ? 'Already registered?' : "Don't have a faculty account?"}{' '}
+        {!isRegister && (
+          <div className="pt-2 border-t border-white/5 space-y-3">
             <button
               type="button"
-              onClick={() => {
-                setIsRegister(!isRegister);
-                setError(null);
-              }}
-              className="text-white hover:underline font-medium cursor-pointer"
+              onClick={handleUseDemo}
+              disabled={loading}
+              className="w-full py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-[#080B16] hover:bg-white/5 border border-white/10 transition-colors flex items-center justify-center space-x-2 cursor-pointer"
             >
-              {isRegister ? 'Sign In here' : 'Register here'}
+              <span>Instant Fill Faculty Demo Credentials</span>
             </button>
           </div>
+        )}
+
+        {/* Toggle between Login and Register */}
+        <div className="text-center text-xs text-slate-400 pt-1">
+          {isRegister ? (
+            <span>
+              Already have an account?{' '}
+              <button
+                type="button"
+                onClick={() => {
+                  setIsRegister(false);
+                  setError(null);
+                }}
+                className="text-cyan-400 hover:text-cyan-300 font-bold underline cursor-pointer"
+              >
+                Sign In
+              </button>
+            </span>
+          ) : (
+            <span>
+              Need a faculty account?{' '}
+              <button
+                type="button"
+                onClick={() => {
+                  setIsRegister(true);
+                  setError(null);
+                }}
+                className="text-cyan-400 hover:text-cyan-300 font-bold underline cursor-pointer"
+              >
+                Register Here
+              </button>
+            </span>
+          )}
         </div>
       </div>
     </div>
   );
 };
-

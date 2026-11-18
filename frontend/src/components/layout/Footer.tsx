@@ -4,21 +4,21 @@ import { Layers, Github, Terminal, Sparkles, Shield, Heart } from 'lucide-react'
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="border-t border-slate-800/80 bg-[#0B0F19] text-slate-400 relative overflow-hidden">
+    <footer className="border-t border-white/5 bg-[#080B16] text-slate-400 relative overflow-hidden">
       {/* Background glow subtle effect */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-24 bg-purple-600/5 blur-3xl pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-24 bg-gradient-to-r from-purple-600/10 via-blue-600/10 to-cyan-600/10 blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Brand Info */}
           <div className="md:col-span-2 space-y-4">
             <Link to="/" className="flex items-center space-x-3 group">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-blue-500 p-0.5 shadow-md shadow-purple-500/20">
-                <div className="w-full h-full bg-[#0B0F19] rounded-[10px] flex items-center justify-center">
-                  <Layers className="w-4 h-4 text-purple-400" />
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#8B5CF6] via-[#3B82F6] to-[#22D3EE] p-[2px] shadow-md shadow-purple-500/25">
+                <div className="w-full h-full bg-[#080B16] rounded-[10px] flex items-center justify-center">
+                  <Layers className="w-5 h-5 text-purple-400 group-hover:text-cyan-300 transition-colors" />
                 </div>
               </div>
-              <span className="text-xl font-bold tracking-tight text-white">
+              <span className="text-xl font-black tracking-tight text-white">
                 RepoScope
               </span>
             </Link>
@@ -26,26 +26,26 @@ export const Footer: React.FC = () => {
               Understand the code. Evaluate the engineering. Discover the best projects.
               An intelligence and project evaluation platform designed for technical reviewers, faculty, and engineering recruiters.
             </p>
-            <div className="flex items-center space-x-3 text-xs text-slate-500 pt-2">
-              <span className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-slate-900 border border-slate-800">
-                <Terminal className="w-3.5 h-3.5 text-blue-400" />
-                FastAPI + React Monorepo
+            <div className="flex items-center space-x-3 text-xs text-slate-400 pt-2 flex-wrap gap-y-2">
+              <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#101629] border border-white/5 font-mono text-[11px]">
+                <Terminal className="w-3.5 h-3.5 text-cyan-400" />
+                FastAPI + React 18 Monorepo
               </span>
-              <span className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-slate-900 border border-slate-800">
+              <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#101629] border border-white/5 font-mono text-[11px]">
                 <Sparkles className="w-3.5 h-3.5 text-purple-400" />
-                Phase 1 Foundation
+                Phase 1 Modern SaaS Edition
               </span>
             </div>
           </div>
 
           {/* Quick Links */}
           <div className="space-y-3">
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-slate-200">
-              Platform
+            <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-white">
+              Platform Navigation
             </h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/" className="hover:text-purple-400 transition-colors">
+                <Link to="/" className="hover:text-cyan-300 transition-colors">
                   Overview
                 </Link>
               </li>
@@ -55,12 +55,17 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/history" className="hover:text-cyan-300 transition-colors">
+                  Evaluation History
+                </Link>
+              </li>
+              <li>
                 <a href="#features" className="hover:text-purple-400 transition-colors">
                   Features & Capabilities
                 </a>
               </li>
               <li>
-                <a href="#how-it-works" className="hover:text-purple-400 transition-colors">
+                <a href="#how-it-works" className="hover:text-cyan-300 transition-colors">
                   How It Works
                 </a>
               </li>
@@ -74,11 +79,11 @@ export const Footer: React.FC = () => {
 
           {/* Architecture & Engineering Links */}
           <div className="space-y-3">
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-slate-200">
+            <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-white">
               Engineering & Minor Project
             </h4>
             <ul className="space-y-2 text-sm">
-              <li className="flex items-center gap-1.5 text-slate-400">
+              <li className="flex items-center gap-1.5 text-slate-300">
                 <Shield className="w-3.5 h-3.5 text-emerald-400" />
                 <span>Evidence-based Scoring</span>
               </li>
@@ -96,7 +101,7 @@ export const Footer: React.FC = () => {
                   className="inline-flex items-center space-x-1.5 text-xs text-slate-400 hover:text-white transition-colors"
                 >
                   <Github className="w-4 h-4" />
-                  <span>GitHub Repository Placeholder</span>
+                  <span>GitHub Repository</span>
                 </a>
               </li>
             </ul>
@@ -104,16 +109,13 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-slate-800/60 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <p>
-            © {new Date().getFullYear()} RepoScope. All rights reserved. Built as a Computer Science Engineering minor project.
-          </p>
+        <div className="mt-12 pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+          <p>&copy; {new Date().getFullYear()} RepoScope Intelligence Platform. All rights reserved.</p>
           <p className="flex items-center gap-1">
-            Engineered with <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" /> for clean code evaluation.
+            Engineered with <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" /> for academic excellence
           </p>
         </div>
       </div>
     </footer>
   );
 };
-
