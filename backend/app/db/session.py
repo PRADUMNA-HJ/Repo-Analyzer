@@ -9,15 +9,28 @@ logger = logging.getLogger("reposcope.db")
 
 # Create asynchronous engine
 # connect_args={"check_same_thread": False} is required if using sqlite
+is_sqlite = "sqlite" in settings.ASYNC_DATABASE_URL
 connect_args = {}
-if "sqlite" in settings.ASYNC_DATABASE_URL:
+engine_kwargs = {
+    "echo": False,
+    "pool_pre_ping": True,
+}
+
+if is_sqlite:
     connect_args["check_same_thread"] = False
+else:
+    # Production PostgreSQL connection pool configuration
+    engine_kwargs.update({
+        "pool_size": 10,
+        "max_overflow": 20,
+        "pool_recycle": 300,
+        "pool_timeout": 30,
+    })
 
 engine = create_async_engine(
     settings.ASYNC_DATABASE_URL,
-    echo=False,
     connect_args=connect_args,
-    pool_pre_ping=True
+    **engine_kwargs
 )
 
 AsyncSessionLocal = async_sessionmaker(

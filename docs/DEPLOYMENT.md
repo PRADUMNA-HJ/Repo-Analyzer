@@ -37,9 +37,11 @@ RepoScope includes a production `render.yaml` Blueprint definition at the projec
 6. Configure the following environment variables in the Render dashboard:
    - `FRONTEND_ORIGIN`: `https://your-app.vercel.app`
    - `ALLOWED_ORIGINS`: `https://your-app.vercel.app,http://localhost:5173`
+   - `ADMIN_BOOTSTRAP_EMAIL`: `faculty@university.edu`
+   - `ADMIN_BOOTSTRAP_PASSWORD`: Generated automatically by Blueprint or set manually.
    - `GITHUB_TOKEN`: *(Optional)* Your fine-grained read-only GitHub PAT.
    - `GEMINI_API_KEY`: *(Optional)* Your Google Gemini API key.
-7. Click **Apply**. Render will run database migrations and start the web service.
+7. Click **Apply**. Render will run database migrations (`alembic upgrade head`) and start the web service.
 
 ### Option B: Manual Service Creation
 1. **Create PostgreSQL Database:**
@@ -52,11 +54,14 @@ RepoScope includes a production `render.yaml` Blueprint definition at the projec
    - Environment: `Python`.
    - Build Command: `pip install -r requirements.txt && alembic upgrade head`
    - Start Command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 2`
+   - Health Check Path: `/api/v1/health`
    - Add Environment Variables:
      - `DATABASE_URL`: *(Paste Internal Database URL from Step 1)*
      - `APP_ENV`: `production`
      - `DEMO_MODE`: `false`
      - `JWT_SECRET_KEY`: *(Generate a 64+ char random hex string)*
+     - `ADMIN_BOOTSTRAP_EMAIL`: `faculty@university.edu`
+     - `ADMIN_BOOTSTRAP_PASSWORD`: *(Generate a secure 16+ char password)*
      - `METHODOLOGY_VERSION`: `2.1.0`
      - `FRONTEND_ORIGIN`: `https://your-app.vercel.app`
      - `ALLOWED_ORIGINS`: `https://your-app.vercel.app`
@@ -123,5 +128,13 @@ Once deployed, verify the full end-to-end workflow on the live production enviro
    Click **Download Academic PDF Dossier** on the completed evaluation. Verify that a valid multi-page PDF (`RepoScope-Dossier-octocat.pdf`) downloads cleanly.
 
 6. **Faculty History & Authentication:**
-   Click **Faculty Portal**, sign in with `faculty@university.edu` / `faculty123`, navigate to `/history`, and verify that previous evaluations appear and review notes can be submitted.
+   Click **Faculty Portal**, sign in with your configured faculty credentials (`ADMIN_BOOTSTRAP_EMAIL` / `ADMIN_BOOTSTRAP_PASSWORD`), navigate to `/history`, and verify that previous evaluations appear and review notes can be submitted.
+
+---
+
+## 4. Reference Documentation
+
+- [Production Environment Specification](file:///c:/Users/Hp/OneDrive/Desktop/github_analyzer/docs/PRODUCTION_ENVIRONMENT.md)
+- [Production Verification & Testing Protocol](file:///c:/Users/Hp/OneDrive/Desktop/github_analyzer/docs/PRODUCTION_TESTING.md)
+- [Final Release Report](file:///c:/Users/Hp/OneDrive/Desktop/github_analyzer/docs/FINAL_RELEASE_REPORT.md)
 

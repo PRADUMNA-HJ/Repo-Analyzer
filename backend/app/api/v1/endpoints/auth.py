@@ -140,15 +140,23 @@ async def list_users(
 async def seed_default_faculty(
     db: AsyncSession = Depends(get_db)
 ):
-    """Seeds a default faculty evaluator account if none exists."""
-    result = await db.execute(select(User).where(User.email == "faculty@university.edu"))
+    """Seeds a default faculty evaluator account if none exists (development/testing only)."""
+    if settings.APP_ENV == "production":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Public credential seeding is disabled in production environments. Please authenticate via /auth/login or configure ADMIN_BOOTSTRAP_PASSWORD."
+        )
+
+    bootstrap_email = (settings.ADMIN_BOOTSTRAP_EMAIL or "faculty@university.edu").lower().strip()
+    result = await db.execute(select(User).where(User.email == bootstrap_email))
     user = result.scalar_one_or_none()
     if user:
         return UserResponse.model_validate(user)
 
+    default_pw = settings.ADMIN_BOOTSTRAP_PASSWORD or "faculty123"
     user = User(
-        email="faculty@university.edu",
-        hashed_password=get_password_hash("faculty123"),
+        email=bootstrap_email,
+        hashed_password=get_password_hash(default_pw),
         full_name="Dr. Alistair Vance, Ph.D.",
         department="Department of Computer Science & Engineering",
         role="FACULTY",

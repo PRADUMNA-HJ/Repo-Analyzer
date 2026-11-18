@@ -168,9 +168,21 @@ async def analyze_repository(
     summary="Get Analysis Job Status",
     description="Returns current progress percent and execution stage for an asynchronous job."
 )
-async def get_analysis_status(analysis_id: str) -> AnalysisJobStatus:
+async def get_analysis_status(
+    analysis_id: str,
+    db: AsyncSession = Depends(get_db)
+) -> AnalysisJobStatus:
     status_entry = await job_store.get_status(analysis_id)
     if not status_entry:
+        # Fallback to database check in case worker restarted or handled by separate Uvicorn process
+        eval_record = await db.get(Evaluation, analysis_id)
+        if eval_record:
+            return AnalysisJobStatus(
+                analysis_id=analysis_id,
+                stage=AnalysisStage.COMPLETED,
+                progress_percent=100,
+                message="Analysis completed and persisted."
+            )
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Analysis job '{analysis_id}' not found or expired."
@@ -184,9 +196,19 @@ async def get_analysis_status(analysis_id: str) -> AnalysisJobStatus:
     summary="Get Completed Analysis Result",
     description="Returns full evaluated analysis report once processing has completed."
 )
-async def get_analysis_result(analysis_id: str) -> AnalysisResponse:
+async def get_analysis_result(
+    analysis_id: str,
+    db: AsyncSession = Depends(get_db)
+) -> AnalysisResponse:
     result = await job_store.get_result(analysis_id)
     if not result:
+        # Check database fallback
+        stmt = select(Evaluation).where(Evaluation.id == analysis_id).options(selectinload(Evaluation.projects))
+        db_res = await db.execute(stmt)
+        eval_rec = db_res.scalar_one_or_none()
+        if eval_rec:
+            return EvaluationPersistenceService.evaluation_to_analysis_response(eval_rec)
+
         status_entry = await job_store.get_status(analysis_id)
         if status_entry and status_entry.stage != AnalysisStage.COMPLETED:
             raise HTTPException(
@@ -206,9 +228,20 @@ async def get_analysis_result(analysis_id: str) -> AnalysisResponse:
     summary="Get All Projects in Analysis",
     description="Returns the list of analyzed projects for this target."
 )
-async def get_analysis_projects(analysis_id: str) -> List[DetailedProjectAnalysis]:
+async def get_analysis_projects(
+    analysis_id: str,
+    db: AsyncSession = Depends(get_db)
+) -> List[DetailedProjectAnalysis]:
     result = await job_store.get_result(analysis_id)
     if not result:
+        # Check database fallback
+        stmt = select(Evaluation).where(Evaluation.id == analysis_id).options(selectinload(Evaluation.projects))
+        db_res = await db.execute(stmt)
+        eval_rec = db_res.scalar_one_or_none()
+        if eval_rec:
+            resp = EvaluationPersistenceService.evaluation_to_analysis_response(eval_rec)
+            return resp.analyzed_projects
+
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Analysis results not found."
@@ -222,14 +255,31 @@ async def get_analysis_projects(analysis_id: str) -> List[DetailedProjectAnalysi
     summary="Get Single Project Analysis",
     description="Returns detailed engineering evaluation for a specific project."
 )
-async def get_single_project(analysis_id: str, project_id: str) -> DetailedProjectAnalysis:
+async def get_single_project(
+    analysis_id: str,
+    project_id: str,
+    db: AsyncSession = Depends(get_db)
+) -> DetailedProjectAnalysis:
     result = await job_store.get_result(analysis_id)
-    if not result:
+    projects_list: List[DetailedProjectAnalysis] = []
+    if result:
+        projects_list = result.analyzed_projects
+    else:
+        # Check database fallback
+        stmt = select(Evaluation).where(Evaluation.id == analysis_id).options(selectinload(Evaluation.projects))
+        db_res = await db.execute(stmt)
+        eval_rec = db_res.scalar_one_or_none()
+        if eval_rec:
+            resp = EvaluationPersistenceService.evaluation_to_analysis_response(eval_rec)
+            projects_list = resp.analyzed_projects
+
+    if not projects_list:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Analysis results not found."
         )
-    for p in result.analyzed_projects:
+
+    for p in projects_list:
         if p.id.lower() == project_id.lower() or p.name.lower() == project_id.lower():
             return p
     raise HTTPException(

@@ -24,6 +24,8 @@ class Settings(BaseSettings):
     JWT_SECRET_KEY: str = "reposcope_academic_evaluation_platform_jwt_secret_key_2026_cse_board_super_secure"
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440  # 24 hours
+    ADMIN_BOOTSTRAP_EMAIL: str = "faculty@university.edu"
+    ADMIN_BOOTSTRAP_PASSWORD: Optional[str] = None
 
     # Academic Evaluation Methodology
     METHODOLOGY_VERSION: str = "2.1.0"
@@ -63,6 +65,9 @@ class Settings(BaseSettings):
             url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
         elif url.startswith("sqlite://") and not url.startswith("sqlite+aiosqlite://"):
             url = url.replace("sqlite://", "sqlite+aiosqlite://", 1)
+        # asyncpg requires 'ssl=' instead of 'sslmode='
+        if "postgresql+asyncpg://" in url and "sslmode=" in url:
+            url = url.replace("sslmode=", "ssl=")
         return url
 
     @property
@@ -75,10 +80,12 @@ class Settings(BaseSettings):
             url = url.replace("sqlite+aiosqlite://", "sqlite://", 1)
         elif url.startswith("postgres://"):
             url = url.replace("postgres://", "postgresql://", 1)
+        if "postgresql://" in url and "ssl=" in url and "sslmode=" not in url:
+            url = url.replace("ssl=", "sslmode=")
         return url
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=(".env", "backend/.env"),
         env_file_encoding="utf-8",
         case_sensitive=True,
         extra="ignore"

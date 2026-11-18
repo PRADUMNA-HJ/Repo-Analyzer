@@ -11,6 +11,8 @@ class HealthResponse(BaseModel):
     environment: str = Field(default="development", description="Current execution environment")
     demo_mode: bool = Field(default=True, description="Whether demo data mode is enabled")
     github_auth_configured: bool = Field(default=False, description="Whether GITHUB_TOKEN is present")
+    database: Optional[str] = Field(default=None, description="Database connection status: connected or disconnected")
+    database_type: Optional[str] = Field(default=None, description="Active database engine: postgresql or sqlite")
 
 
 class AnalysisType(str, Enum):

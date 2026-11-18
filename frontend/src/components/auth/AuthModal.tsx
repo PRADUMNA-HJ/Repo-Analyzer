@@ -203,8 +203,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
           </button>
         </form>
 
-        {/* Demo Fast Login */}
-        {!isRegister && (
+        {/* Demo Fast Login (Development / Testing Only) */}
+        {!isRegister && import.meta.env.DEV && (
           <div className="pt-2 border-t border-white/5 space-y-3">
             <button
               type="button"
@@ -212,7 +212,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
               disabled={loading}
               className="w-full py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-[#080B16] hover:bg-white/5 border border-white/10 transition-colors flex items-center justify-center space-x-2 cursor-pointer"
             >
-              <span>Instant Fill Faculty Demo Credentials</span>
+              <span>Instant Fill Faculty Demo Credentials (Dev Mode)</span>
             </button>
           </div>
         )}

@@ -30,12 +30,26 @@ async def lifespan(app: FastAPI):
 
     # Seed default faculty account if none exists
     try:
+        bootstrap_email = (settings.ADMIN_BOOTSTRAP_EMAIL or "faculty@university.edu").lower().strip()
         async with AsyncSessionLocal() as session:
-            res = await session.execute(select(User).where(User.email == "faculty@university.edu"))
+            res = await session.execute(select(User).where(User.email == bootstrap_email))
             if not res.scalar_one_or_none():
+                if settings.APP_ENV == "production":
+                    if settings.ADMIN_BOOTSTRAP_PASSWORD:
+                        raw_pw = settings.ADMIN_BOOTSTRAP_PASSWORD
+                    else:
+                        import secrets
+                        raw_pw = secrets.token_urlsafe(16)
+                        logger.warning(
+                            "Production environment: No ADMIN_BOOTSTRAP_PASSWORD provided. "
+                            "Generated high-entropy bootstrap credential for %s", bootstrap_email
+                        )
+                else:
+                    raw_pw = settings.ADMIN_BOOTSTRAP_PASSWORD or "faculty123"
+
                 default_faculty = User(
-                    email="faculty@university.edu",
-                    hashed_password=get_password_hash("faculty123"),
+                    email=bootstrap_email,
+                    hashed_password=get_password_hash(raw_pw),
                     full_name="Dr. Alistair Vance, Ph.D.",
                     department="Department of Computer Science & Engineering",
                     role="FACULTY",
@@ -43,7 +57,7 @@ async def lifespan(app: FastAPI):
                 )
                 session.add(default_faculty)
                 await session.commit()
-                logger.info("Seeded default faculty account: faculty@university.edu")
+                logger.info("Initialized bootstrap faculty account: %s", bootstrap_email)
     except Exception as e:
         logger.warning(f"Could not seed default faculty account: {e}")
 

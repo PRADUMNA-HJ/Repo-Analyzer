@@ -9,7 +9,7 @@ from app.core.config import settings
 from app.models.evaluation import Evaluation
 from app.models.project import EvaluatedProject
 from app.models.audit import AuditRecord
-from app.schemas.analysis import AnalysisResponse, DetailedProjectAnalysis
+from app.schemas.analysis import AnalysisResponse, DetailedProjectAnalysis, AnalysisStage
 
 logger = logging.getLogger("reposcope.persistence")
 
@@ -127,4 +127,58 @@ class EvaluationPersistenceService:
         await db.refresh(eval_record)
         logger.info(f"Successfully persisted evaluation '{eval_record.id}' for target '{eval_record.target_identifier}'")
         return eval_record
+
+    @staticmethod
+    def evaluation_to_analysis_response(evaluation: Evaluation) -> AnalysisResponse:
+        """Reconstructs an AnalysisResponse schema from an Evaluation database entity."""
+        analyzed_projects: List[DetailedProjectAnalysis] = []
+        for p in (evaluation.projects or []):
+            proj_short_id = p.id.split("_", 1)[-1] if "_" in p.id else p.id
+            analyzed_projects.append(
+                DetailedProjectAnalysis(
+                    id=proj_short_id,
+                    name=p.name,
+                    display_name=p.display_name,
+                    description=p.description,
+                    repo_url=p.repo_url,
+                    overall_score=p.overall_score,
+                    rank=p.rank,
+                    summary=p.summary,
+                    stars=p.stars,
+                    forks=p.forks,
+                    primary_language=p.primary_language,
+                    problem_solved=p.problem_solved,
+                    architecture_notes=p.architecture_notes,
+                    confidence_score=p.confidence_score,
+                    confidence_label=p.confidence_label,
+                    key_features=p.key_features or [],
+                    tech_stack=p.tech_stack or [],
+                    language_breakdown=p.language_breakdown or [],
+                    criteria_breakdown=p.criteria_breakdown or [],
+                    strengths=p.strengths or [],
+                    weaknesses=p.weaknesses or [],
+                    recommendations=p.recommendations or [],
+                    complexity_metrics=p.complexity_metrics,
+                    security_findings=p.security_findings or [],
+                    evidence_files=p.evidence_files or [],
+                )
+            )
+
+        eval_date_str = ""
+        if evaluation.evaluation_date:
+            eval_date_str = evaluation.evaluation_date.isoformat()
+
+        return AnalysisResponse(
+            is_demo=evaluation.is_demo,
+            target_type=evaluation.target_type,
+            target_identifier=evaluation.target_identifier,
+            total_repositories_found=evaluation.total_repositories_found,
+            analyzed_projects=analyzed_projects,
+            evaluation_date=eval_date_str,
+            disclaimer=evaluation.disclaimer or "",
+            analysis_id=evaluation.id,
+            status=AnalysisStage.COMPLETED,
+            user_profile=evaluation.user_profile,
+            excluded_repositories=evaluation.excluded_repositories,
+        )
 
