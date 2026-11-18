@@ -39,3 +39,4 @@ class EvaluatedProject(Base):
 
     # Relationships
     evaluation: Mapped["Evaluation"] = relationship("Evaluation", back_populates="projects")
+

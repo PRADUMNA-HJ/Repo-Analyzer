@@ -20,3 +20,4 @@ class AuditRecord(Base):
     # Relationships
     evaluation: Mapped[Optional["Evaluation"]] = relationship("Evaluation", back_populates="audit_records")
     user: Mapped[Optional["User"]] = relationship("User", back_populates="audit_records")
+

@@ -38,3 +38,4 @@ class Evaluation(Base):
     projects: Mapped[List["EvaluatedProject"]] = relationship("EvaluatedProject", back_populates="evaluation", cascade="all, delete-orphan", order_by="EvaluatedProject.rank")
     review_notes: Mapped[List["ReviewNote"]] = relationship("ReviewNote", back_populates="evaluation", cascade="all, delete-orphan", order_by="ReviewNote.created_at.desc()")
     audit_records: Mapped[List["AuditRecord"]] = relationship("AuditRecord", back_populates="evaluation", cascade="all, delete-orphan")
+

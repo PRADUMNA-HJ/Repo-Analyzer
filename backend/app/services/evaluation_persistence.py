@@ -127,3 +127,4 @@ class EvaluationPersistenceService:
         await db.refresh(eval_record)
         logger.info(f"Successfully persisted evaluation '{eval_record.id}' for target '{eval_record.target_identifier}'")
         return eval_record
+

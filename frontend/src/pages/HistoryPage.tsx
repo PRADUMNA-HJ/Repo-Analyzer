@@ -364,3 +364,4 @@ export const HistoryPage: React.FC = () => {
     </Layout>
   );
 };
+

@@ -27,3 +27,4 @@ class User(Base):
     evaluations: Mapped[List["Evaluation"]] = relationship("Evaluation", back_populates="created_by", cascade="all, delete-orphan")
     review_notes: Mapped[List["ReviewNote"]] = relationship("ReviewNote", back_populates="reviewer", cascade="all, delete-orphan")
     audit_records: Mapped[List["AuditRecord"]] = relationship("AuditRecord", back_populates="user")
+

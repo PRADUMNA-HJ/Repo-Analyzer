@@ -31,3 +31,4 @@ class ReviewNote(Base):
     # Relationships
     evaluation: Mapped["Evaluation"] = relationship("Evaluation", back_populates="review_notes")
     reviewer: Mapped["User"] = relationship("User", back_populates="review_notes")
+

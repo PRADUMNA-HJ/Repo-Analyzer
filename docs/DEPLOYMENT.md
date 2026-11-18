@@ -124,3 +124,4 @@ Once deployed, verify the full end-to-end workflow on the live production enviro
 
 6. **Faculty History & Authentication:**
    Click **Faculty Portal**, sign in with `faculty@university.edu` / `faculty123`, navigate to `/history`, and verify that previous evaluations appear and review notes can be submitted.
+

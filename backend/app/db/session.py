@@ -48,3 +48,4 @@ async def init_db() -> None:
         logger.info("Database schema initialized successfully.")
     except Exception as e:
         logger.error(f"Error during database initialization: {e}")
+

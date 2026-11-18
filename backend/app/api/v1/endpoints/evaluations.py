@@ -393,3 +393,4 @@ async def add_review_note(
     await db.refresh(note)
 
     return ReviewNoteResponse.model_validate(note)
+

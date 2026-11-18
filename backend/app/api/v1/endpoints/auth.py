@@ -158,3 +158,4 @@ async def seed_default_faculty(
     await db.commit()
     await db.refresh(user)
     return UserResponse.model_validate(user)
+
